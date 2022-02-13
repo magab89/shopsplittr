@@ -1,35 +1,51 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useTable } from 'react-table'
+import styled from 'styled-components'
+import { DynamicCell } from './cell'
 
-const PlusMinus = ({ value, onChange }) => (
-  <>
-    <button
-      onClick={() => onChange(1)}
-    >
-      +
-    </button>
-    <span> {value} </span>
-    <button
-      onClick={() => onChange(-1)}
-    >
-      -
-    </button>
-  </>
-)
+const colors = {
+  green50: 'rgba(0,128,0,0.5)',
+  green: 'rgba(0,128,0,1)',
+  orange: 'rgba(255,165,0, 1)',
+  orange50: 'rgba(255,165,0, 0.5)',
+  white: 'rgba(255,255,255,1)',
+  white50: 'rgba(255,255,255,0.5)'
+}
 
-const nonPersonCells = [
-  'name', 'amount', 'price'
-]
+const Styles = styled.div`
+  padding: 1rem;
+
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
+
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
+`
 
 export default function Table({
   products,
   sum,
-  people,
-  updateMyData,
-  getHeaderProps,
-  getColumnProps,
-  getRowProps,
-  getCellProps,
+  names,
+  updateMyData
 }) {
   const data = React.useMemo(
     () => {
@@ -37,48 +53,68 @@ export default function Table({
     }, [products, sum]
   )
 
-  const peopleColumns = people.map(person => ({
+  const peopleColumns = names.map(person => ({
     Header: person,
     accessor: person
   }))
 
-  const DynamicCell = ({
-    column: { id },
-    cell: { value: initialValue, column },
-    row: { original, index },
-    updateMyData
-  }) => {
-    const [value, setValue] = useState(initialValue)
+  function getRowBackground(index) {
+    if (index === data.length - 1) {
+      return 'orange'
+    }
+    return index % 2 === 0 ? 'rgba(0,0,0,.1)' : 'white'
+  }
 
-    useEffect(() => {
-      setValue(initialValue)
-    }, [initialValue])
+  const getRowProps = (row) => ({
+    style: {
+      background: getRowBackground(row.index)
+    }
+  })
 
-    if (nonPersonCells.includes(id) || index === data.length - 1) {
-      return (
-        <span
-          style={{
-            whiteSpace: 'pre-wrap'
-          }}
-        >
-      {value}
-      </span>
-      )
+  function isRowAmountDone(row) {
+    let sum = 0
+    Object.keys(row).forEach(key => {
+      if (names.includes(key)) {
+        sum += row[key]
+      }
+    })
+    return row.amount === sum
+  }
+
+  function isRowPriceDone(row) {
+    let sum = 0
+    Object.keys(row).forEach(key => {
+      if (names.includes(key)) {
+        sum += row[key]
+      }
+    })
+    return row.price === sum
+  }
+
+  function getCellStyle(cellInfo) {
+    const style: any = {}
+    if (cellInfo.column.id === 'amount' && isRowAmountDone(cellInfo.row.values)) {
+      style.background = cellInfo.row.index % 2 === 0 ? 'rgba(115,189,51,0.98)' : 'rgba(0,128,0,1)'
     }
 
-    return (
-      <span
-        style={{
-          whiteSpace: 'pre-wrap'
-        }}
-      >
-      <PlusMinus
-        value={value}
-        onChange={increment => updateMyData(index, id, increment)}
-      />
-    </span>
-    )
+    if (cellInfo.row.index === data.length - 1 && cellInfo.column.id === 'price') {
+      style.background = isRowPriceDone(cellInfo.row.values) ? 'rgba(115,189,51,0.98)' : 'orange'
+    }
+
+    if (cellInfo.row.index === data.length - 1 && cellInfo.column.id === 'amount') {
+      style.background = isRowPriceDone(cellInfo.row.values) ? 'rgba(115,189,51,0.98)' : 'orange'
+    }
+
+    if (cellInfo.row.index !== data.length - 1 && names.includes(cellInfo.column.id) && cellInfo.value > 0) {
+      style.background = cellInfo.row.index % 2 === 0 ? 'rgba(246,166,0)' : 'rgb(246,166,0, 0.50)'
+    }
+
+    return style
   }
+
+  const getCellProps = (cellInfo) => ({
+    style: getCellStyle(cellInfo)
+  })
 
   const defaultColumn = useMemo(
     () => ({
@@ -87,10 +123,10 @@ export default function Table({
       maxWidth: 400,
       Cell: DynamicCell
     }),
-    [data]
+    []
   )
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: 'Name',
@@ -105,8 +141,7 @@ export default function Table({
         accessor: 'amount'
       },
       ...peopleColumns
-    ],
-    []
+    ], []
   )
 
   const {
@@ -125,55 +160,54 @@ export default function Table({
   )
 
   return (
-    <table {...getTableProps()}>
-      <thead>
-      {headerGroups.map(headerGroup => (
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => (
-            <th
-              // Return an array of prop objects and react-table will merge them appropriately
-              {...column.getHeaderProps([
-                {
-                  className: column.className,
-                  style: column.style,
-                },
-                getColumnProps(column),
-                getHeaderProps(column),
-              ])}
-            >
-              {column.render('Header')}
-            </th>
-          ))}
-        </tr>
-      ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-      {rows.map((row, i) => {
-        prepareRow(row)
-        return (
-          // Merge user row props in
-          <tr {...row.getRowProps(getRowProps(row))}>
-            {row.cells.map(cell => {
-              return (
-                <td
-                  // Return an array of prop objectsF and react-table will merge them appropriately
-                  {...cell.getCellProps([
-                    {
-                      className: cell.column.className,
-                      style: cell.column.style,
-                    },
-                    getColumnProps(cell.column),
-                    getCellProps(cell),
-                  ])}
-                >
-                  {cell.render('Cell')}
-                </td>
-              )
-            })}
+    <Styles>
+      <table {...getTableProps()}>
+        <thead>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                // Return an array of prop objects and react-table will merge them appropriately
+                {...column.getHeaderProps([
+                  {
+                    className: column.className,
+                    style: column.style
+                  }
+                ])}
+              >
+                {column.render('Header')}
+              </th>
+            ))}
           </tr>
-        )
-      })}
-      </tbody>
-    </table>
+        ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            // Merge user row props in
+            <tr {...row.getRowProps(getRowProps(row))}>
+              {row.cells.map(cell => {
+                return (
+                  <td
+                    // Return an array of prop objectsF and react-table will merge them appropriately
+                    {...cell.getCellProps([
+                      {
+                        className: cell.column.className,
+                        style: cell.column.style
+                      },
+                      getCellProps(cell)
+                    ])}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
+        </tbody>
+      </table>
+    </Styles>
   )
 }
