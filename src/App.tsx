@@ -1,65 +1,42 @@
-import React, { useState } from 'react'
-import Kifli from './routes/kifli'
-import { ctrlA } from './routes/kifli/test-kifl-order'
 import { Link, Outlet } from 'react-router-dom'
+import styled from 'styled-components'
 
-export function Test () {
+const StyledNav = styled.nav`
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin-bottom: 1rem;
+  background: #223773;
+  
+  a {
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    margin: 2px;
+    color: white;
+    background: #3456b5
+  }
+`
+
+export function Home () {
   return (
     <div>
-      <h1>THIS IS A TEST PAGE</h1>
+      <h1>
+        THIS IS HOME
+      </h1>
     </div>
   )
-}
-
-export function InputAreaKifli () {
-  const [email, setEmail] = useState('')
-  const [ready, setReady] = useState(false)
-
-  function handleLoadData(e) {
-    if (email) setReady(true)
-  }
-
-  function handleLoadTest(e) {
-    setEmail(ctrlA)
-    setReady(true)
-  }
-
-  function handleDelete(e) {
-    setReady(false)
-    setEmail('')
-  }
-
-  function handleChange(event) {
-    setEmail(event.target.value)
-  }
-
-  return (<>
-      <textarea
-        value={email}
-        onChange={e => handleChange(e)}
-        rows={10}
-      />
-    <button type="button" onClick={(e) => handleLoadData(e)}>LOAD ORDER EMAIL</button>
-    <button type="button" onClick={(e) => handleDelete(e)}>DELETE ORDER EMAIL</button>
-    <button type="button" onClick={(e) => handleLoadTest(e)}>LOAD TEST EMAIL</button>
-    {ready && email && <Kifli
-      orderConfirmEmail={email}
-    />}
-  </>)
 }
 
 function App() {
   return (
     <div className="App">
       <h1>This is ShopSplittR</h1>
-      <nav style={{
-        borderBottom: "solid 1px",
-        paddingBottom: "1rem",
-        marginBottom: "1rem"
-      }}>
+      <StyledNav>
         <Link to="/">Home</Link> |{" "}
-        <Link to="/test">Test</Link>
-      </nav>
+        <Link to="/kifli">Kifli</Link>
+        <Link to="/tesco">Tesco</Link>
+      </StyledNav>
       <Outlet/>
     </div>
   )

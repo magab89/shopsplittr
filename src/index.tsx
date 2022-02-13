@@ -1,15 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App, { InputAreaKifli, Test } from './App'
+import App, { Home } from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Kifli from './routes/kifli'
+import Tesco from './routes/tesco'
 
 ReactDOM.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route path="/" element={<InputAreaKifli />} />
-        <Route path="test" element={<Test />} />
+        <Route path="/" element={<Home />} />
+        <Route path="kifli" element={<Kifli />} />
+        <Route path="tesco" element={<Tesco />} />
       </Route>
     </Routes>
   </BrowserRouter>,

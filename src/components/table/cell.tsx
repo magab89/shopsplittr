@@ -28,7 +28,6 @@ export const DynamicCell = (props) => {
     rows,
     updateData
   } = props
-  // console.log(props)
   const [value, setValue] = useState(initialValue)
 
   useEffect(() => {

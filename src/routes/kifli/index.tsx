@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { processKifli } from './processor'
 import Table from '../../components/table'
+import { ctrlA } from './test-kifl-order'
 
 export interface Product {
   name: string
@@ -58,19 +59,27 @@ function calculateTotal (data: Product[]) {
   return total
 }
 
-export default function Kifli({ orderConfirmEmail }) {
-  const processed = processKifli(orderConfirmEmail).map(item => (
-    {
-      ...item,
-      ...names.reduce((previous, current) => {
-        previous[current] = 0
-        return previous
-      }, {})
-    }
-  ))
-
-  const [data, setData] = useState(processed)
+export default function Kifli() {
+  const [email, setEmail] = useState('')
+  const [ready, setReady] = useState(false)
+  const empty: Product[] = []
+  const [data, setData] = useState(empty)
   const [total, setTotal] = useState(initTotal(names))
+
+  useEffect(() => {
+    if (email && ready) {
+      const processed = processKifli(email).map(item => (
+        {
+          ...item,
+          ...names.reduce((previous, current) => {
+            previous[current] = 0
+            return previous
+          }, {})
+        }
+      ))
+      setData(processed)
+    }
+  }, [email, ready])
 
   useEffect(() => {
     setTotal(calculateTotal(data))
@@ -99,10 +108,48 @@ export default function Kifli({ orderConfirmEmail }) {
     setData(newData)
   }
 
-  const resetData = () => setData(processed)
+  const resetData = () => {
+    const processed = processKifli(email).map(item => (
+      {
+        ...item,
+        ...names.reduce((previous, current) => {
+          previous[current] = 0
+          return previous
+        }, {})
+      }
+    ))
+    setData(processed)
+  }
+
+  function handleLoadData(e) {
+    if (email) setReady(true)
+  }
+
+  function handleLoadTest(e) {
+    setEmail(ctrlA)
+    setReady(true)
+  }
+
+  function handleDelete(e) {
+    setReady(false)
+    setEmail('')
+  }
+
+  function handleChange(event) {
+    setEmail(event.target.value)
+  }
 
   return (<>
-      <div>
+      <textarea
+        value={email}
+        onChange={e => handleChange(e)}
+        rows={10}
+      />
+      <button type="button" onClick={(e) => handleLoadData(e)}>LOAD ORDER EMAIL</button>
+      <button type="button" onClick={(e) => handleDelete(e)}>DELETE ORDER EMAIL</button>
+      <button type="button" onClick={(e) => handleLoadTest(e)}>LOAD TEST EMAIL</button>
+
+      { ready && email && <div>
         <button onClick={resetData}>Reset Table</button>
         <Table
           sum={total}
@@ -110,7 +157,7 @@ export default function Kifli({ orderConfirmEmail }) {
           products={data}
           updateData={addValueToData}
         />
-      </div>
+      </div>}
     </>
   )
 }
