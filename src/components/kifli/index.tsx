@@ -12,12 +12,19 @@ export interface Product {
 
 const names = ['Gabor', 'Dia', 'Peti', 'Csabi', 'Ancsi']
 
-const initTotal = {
-  name: 'Total', amount: 0, price: 0, isDone: false, Gabor: 0, Dia: 0, Peti: 0, Csabi: 0, Ancsi: 0
+const initTotal = (names: string[]) => {
+  const people = {}
+  names.forEach(name => {
+    people[name] = 0
+  })
+
+  return {
+    name: 'Total', amount: 0, price: 0, isDone: false, ...people
+  }
 }
 
 function calculateTotal (data: Product[]) {
-  const total = { ...initTotal }
+  const total = { ...initTotal(names) }
 
   data.forEach(row => {
     const { price, amount } = row
@@ -64,7 +71,7 @@ export default function Kifli({ orderConfirmEmail }) {
   ))
 
   const [data, setData] = useState(processed)
-  const [total, setTotal] = useState(initTotal)
+  const [total, setTotal] = useState(initTotal(names))
 
   useEffect(() => {
     setTotal(calculateTotal(data))
