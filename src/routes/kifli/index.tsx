@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { processKifli } from './processor'
-import './kifli.css'
-import Table from '../table'
+import Table from '../../components/table'
 
 export interface Product {
   name: string
