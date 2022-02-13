@@ -21,8 +21,16 @@ const nonPersonCells = [
   'name', 'amount', 'price'
 ]
 
-
-export default function Table({ products, sum, people, updateMyData }) {
+export default function Table({
+  products,
+  sum,
+  people,
+  updateMyData,
+  getHeaderProps,
+  getColumnProps,
+  getRowProps,
+  getCellProps,
+}) {
   console.log(products)
   const data = React.useMemo(
     () => {
@@ -118,19 +126,21 @@ export default function Table({ products, sum, people, updateMyData }) {
   )
 
   return (
-    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+    <table {...getTableProps()}>
       <thead>
       {headerGroups.map(headerGroup => (
         <tr {...headerGroup.getHeaderGroupProps()}>
           {headerGroup.headers.map(column => (
             <th
-              {...column.getHeaderProps()}
-              style={{
-                borderBottom: 'solid 3px red',
-                background: 'aliceblue',
-                color: 'black',
-                fontWeight: 'bold'
-              }}
+              // Return an array of prop objects and react-table will merge them appropriately
+              {...column.getHeaderProps([
+                {
+                  className: column.className,
+                  style: column.style,
+                },
+                getColumnProps(column),
+                getHeaderProps(column),
+              ])}
             >
               {column.render('Header')}
             </th>
@@ -139,19 +149,23 @@ export default function Table({ products, sum, people, updateMyData }) {
       ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-      {rows.map(row => {
+      {rows.map((row, i) => {
         prepareRow(row)
         return (
-          <tr {...row.getRowProps()}>
+          // Merge user row props in
+          <tr {...row.getRowProps(getRowProps(row))}>
             {row.cells.map(cell => {
               return (
                 <td
-                  {...cell.getCellProps()}
-                  style={{
-                    padding: '10px',
-                    border: 'solid 1px gray',
-                    background: 'papayawhip'
-                  }}
+                  // Return an array of prop objectsF and react-table will merge them appropriately
+                  {...cell.getCellProps([
+                    {
+                      className: cell.column.className,
+                      style: cell.column.style,
+                    },
+                    getColumnProps(cell.column),
+                    getCellProps(cell),
+                  ])}
                 >
                   {cell.render('Cell')}
                 </td>

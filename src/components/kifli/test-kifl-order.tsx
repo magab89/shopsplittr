@@ -128,11 +128,11 @@ Karalábé
 Adj még néhány terméket a rendelésedhez
 A következőket rendelted:
 Product\tKalifa lenmag\t1× 269,00 Ft
-<!--Product\tRoberto Szeletelt Durum Kenyér\t2× 599,00 Ft-->
-<!--Product\tJÓkenyér Német zsemle\t4× 69,00 Ft-->
-<!--Product\tVeresi Bíborka paradicsom\t1× 799,00 Ft-->
-<!--Product\tMizo tej 2.8%\t2× 355,00 Ft-->
-<!--Product\tSokmagvas Császárzsemle\t7× 79,00 Ft-->
+Product\tRoberto Szeletelt Durum Kenyér\t2× 599,00 Ft
+Product\tJÓkenyér Német zsemle\t4× 69,00 Ft
+Product\tVeresi Bíborka paradicsom\t1× 799,00 Ft
+Product\tMizo tej 2.8%\t2× 355,00 Ft
+Product\tSokmagvas Császárzsemle\t7× 79,00 Ft
 <!--Product\tGyömbér, dobozos\t1× 499,00 Ft-->
 <!--Product\tPannónia Mester Ementáli darabolt\t1× 949,00 Ft-->
 <!--Product\tFackelmann gumigyűrű\t1× 399,00 Ft-->
@@ -151,7 +151,7 @@ Product\tKalifa lenmag\t1× 269,00 Ft
 <!--Product\tJutavit Porc-Csont-Izom Komplex 9 120x\t1× 3 299,00 Ft-->
 <!--Product\tScreenitalia Covid-19 nyálteszt 1x\t5× 5 499,00 Ft-->
 <!--Product\tBanán (érlelést igénylő), 1db fürt\t1× 540,00 Ft-->
-Product\tKígyóuborka\t1× 499,00 Ft
+<!--Product\tKígyóuborka\t1× 499,00 Ft-->
 Szállítás\t0,00 Ft
 Borravaló a futárnak\t200,00 Ft
 Összesen (már fizetve)\t48 766,52 Ft
