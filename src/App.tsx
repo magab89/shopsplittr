@@ -11,6 +11,11 @@ function App() {
     if (email) setReady(true)
   }
 
+  function handleLoadTest(e) {
+    setEmail(ctrlA)
+    setReady(true)
+  }
+
   function handleDelete(e) {
     setReady(false)
     setEmail('')
@@ -29,6 +34,7 @@ function App() {
       />
       <button type="button" onClick={(e) => handleLoadData(e)}>LOAD ORDER EMAIL</button>
       <button type="button" onClick={(e) => handleDelete(e)}>DELETE ORDER EMAIL</button>
+      <button type="button" onClick={(e) => handleLoadTest(e)}>LOAD TEST EMAIL</button>
       {ready && email && <Kifli
         orderConfirmEmail={email}
       />}

@@ -106,27 +106,25 @@ export default function Kifli({ orderConfirmEmail }) {
   }, [data])
 
   const updateMyData = (rowIndex, columnId, value) => {
-    setData(old =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          const newValue = row[columnId] + value
-          const isPositive = newValue >= 0
+    const newData = data.map((row, index) => {
+      if (index === rowIndex) {
+        const newValue = row[columnId] + value
+        const isPositive = newValue >= 0
 
-          let rowSum = 0
-          Object.keys(row).forEach(key => {
-            if (names.includes(key)) {
-              rowSum += row[key]
-            }
-          })
-
-          const isTooMuch = rowSum + value > row.amount
-          if (isPositive && !isTooMuch) {
-            row[columnId] = newValue
+        let rowSum = 0
+        Object.keys(row).forEach(key => {
+          if (names.includes(key)) {
+            rowSum += row[key]
           }
+        })
+        const isTooMuch = rowSum + value > row.amount
+        if (isPositive && !isTooMuch) {
+          row[columnId] = newValue
         }
-        return row
-      })
-    )
+      }
+      return row
+    })
+    setData(newData)
   }
 
   const resetData = () => setData(processed)
@@ -163,6 +161,10 @@ export default function Kifli({ orderConfirmEmail }) {
 
     if (cellInfo.row.index === data.length && cellInfo.column.id === 'amount') {
       style.background = isRowPriceDone(cellInfo.row.values) ? 'rgba(115,189,51,0.98)' : 'orange'
+    }
+
+    if (cellInfo.row.index !== data.length && names.includes(cellInfo.column.id) && cellInfo.value > 0) {
+      style.background = cellInfo.row.index % 2 === 0 ? 'rgba(246,166,0)' : 'rgb(246,166,0, 0.50)'
     }
 
     return style
