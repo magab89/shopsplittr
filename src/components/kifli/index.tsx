@@ -7,9 +7,50 @@ export interface Product {
   name: string
   amount: number
   price: number
+  isDone?: boolean
 }
 
 const names = ['Gabor', 'Dia', 'Peti', 'Csabi', 'Ancsi']
+
+const initTotal = {
+  name: 'Total', amount: 0, price: 0, isDone: false, Gabor: 0, Dia: 0, Peti: 0, Csabi: 0, Ancsi: 0
+}
+
+function calculateTotal (data: Product[]) {
+  const total = { ...initTotal }
+
+  data.forEach(row => {
+    const { price, amount } = row
+    for (const [key, value] of Object.entries(row)) {
+      switch (key) {
+        case 'price':
+          if (total[key] === undefined) total[key] = 0
+          total[key] += price * amount
+          break
+        case 'amount':
+          if (total[key] === undefined) total[key] = 0
+          total[key] += Number(value)
+          break
+        case 'name':
+        case 'isDone':
+          break
+        default:
+          if (total[key] === undefined) total[key] = 0
+          if (value > 0) {
+            total[key] += price * Number(value)
+          }
+      }
+    }
+    let sum = 0
+    Object.keys(total).forEach(key => {
+      if (names.includes(key)) {
+        sum += total[key]
+      }
+    })
+    total.isDone = total.price === sum
+  })
+  return total
+}
 
 export default function Kifli({ orderConfirmEmail }) {
   const processed = processKifli(orderConfirmEmail).map(item => (
@@ -23,41 +64,13 @@ export default function Kifli({ orderConfirmEmail }) {
   ))
 
   const [data, setData] = useState(processed)
-  const [sum, setSum] = useState({
-    name: 'Total', amount: 0, price: 0, Gabor: 0, Dia: 0, Peti: 0, Csabi: 0, Ancsi: 0
-  })
+  const [total, setTotal] = useState(initTotal)
 
   useEffect(() => {
-    const newSum = {
-      name: 'Total', amount: 0, price: 0, Gabor: 0, Dia: 0, Peti: 0, Csabi: 0, Ancsi: 0
-    }
-    data.forEach(row => {
-      const { price, amount } = row
-      for (const [key, value] of Object.entries(row)) {
-        switch (key) {
-          case 'price':
-            if (newSum[key] === undefined) newSum[key] = 0
-            newSum[key] += price * amount
-            break
-          case 'amount':
-            if (newSum[key] === undefined) newSum[key] = 0
-            newSum[key] += Number(value)
-            break
-          case 'name':
-            break
-          default:
-            if (newSum[key] === undefined) newSum[key] = 0
-            if (value > 0) {
-              newSum[key] += price * Number(value)
-            }
-        }
-
-      }
-    })
-    setSum(newSum)
+    setTotal(calculateTotal(data))
   }, [data])
 
-  const updateMyData = (rowIndex, columnId, value) => {
+  const addValueToData = (rowIndex, columnId, value) => {
     const newData = data.map((row, index) => {
       if (index === rowIndex) {
         const newValue = row[columnId] + value
@@ -72,6 +85,7 @@ export default function Kifli({ orderConfirmEmail }) {
         const isTooMuch = rowSum + value > row.amount
         if (isPositive && !isTooMuch) {
           row[columnId] = newValue
+          row.isDone = rowSum + value === row.amount
         }
       }
       return row
@@ -85,10 +99,10 @@ export default function Kifli({ orderConfirmEmail }) {
       <div>
         <button onClick={resetData}>Reset Table</button>
         <Table
-          sum={sum}
+          sum={total}
           names={names}
           products={data}
-          updateMyData={updateMyData}
+          updateData={addValueToData}
         />
       </div>
     </>

@@ -20,13 +20,15 @@ const nonPersonCells = [
   'name', 'amount', 'price'
 ]
 
-export const DynamicCell = ({
-  column: { id },
-  cell: { value: initialValue },
-  row: { index },
-  rows,
-  updateMyData
-}) => {
+export const DynamicCell = (props) => {
+  const {
+    column: { id },
+    cell: { value: initialValue },
+    row: { index },
+    rows,
+    updateData
+  } = props
+  // console.log(props)
   const [value, setValue] = useState(initialValue)
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export const DynamicCell = ({
     >
       <PlusMinus
         value={value}
-        onChange={increment => updateMyData(index, id, increment)}
+        onChange={increment => updateData(index, id, increment)}
       />
     </span>
   )

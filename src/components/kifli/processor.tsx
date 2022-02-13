@@ -17,7 +17,8 @@ export function processKifli(order: string): Product[] {
     return {
       name,
       amount: parseInt(amount),
-      price: parseInt(price)
+      price: parseInt(price),
+      isDone: false
     }
   })
 }

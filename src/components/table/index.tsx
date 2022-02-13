@@ -45,7 +45,7 @@ export default function Table({
   products,
   sum,
   names,
-  updateMyData
+  updateData
 }) {
   const data = React.useMemo(
     () => {
@@ -58,55 +58,27 @@ export default function Table({
     accessor: person
   }))
 
-  function getRowBackground(index) {
-    if (index === data.length - 1) {
-      return 'orange'
+  function getRowBackground(row) {
+    if (row.values.name === 'Total') {
+      return row.original.isDone ? colors.green50 : colors.orange
     }
-    return index % 2 === 0 ? 'rgba(0,0,0,.1)' : 'white'
+    return row.index % 2 === 0 ? colors.white50 : colors.white
   }
 
   const getRowProps = (row) => ({
     style: {
-      background: getRowBackground(row.index)
+      background: getRowBackground(row)
     }
   })
 
-  function isRowAmountDone(row) {
-    let sum = 0
-    Object.keys(row).forEach(key => {
-      if (names.includes(key)) {
-        sum += row[key]
-      }
-    })
-    return row.amount === sum
-  }
-
-  function isRowPriceDone(row) {
-    let sum = 0
-    Object.keys(row).forEach(key => {
-      if (names.includes(key)) {
-        sum += row[key]
-      }
-    })
-    return row.price === sum
-  }
-
   function getCellStyle(cellInfo) {
     const style: any = {}
-    if (cellInfo.column.id === 'amount' && isRowAmountDone(cellInfo.row.values)) {
-      style.background = cellInfo.row.index % 2 === 0 ? 'rgba(115,189,51,0.98)' : 'rgba(0,128,0,1)'
+    if (cellInfo.column.id === 'amount' && cellInfo.row.original.isDone) {
+      style.background = cellInfo.row.index % 2 === 0 ? colors.green50 : colors.green
     }
 
-    if (cellInfo.row.index === data.length - 1 && cellInfo.column.id === 'price') {
-      style.background = isRowPriceDone(cellInfo.row.values) ? 'rgba(115,189,51,0.98)' : 'orange'
-    }
-
-    if (cellInfo.row.index === data.length - 1 && cellInfo.column.id === 'amount') {
-      style.background = isRowPriceDone(cellInfo.row.values) ? 'rgba(115,189,51,0.98)' : 'orange'
-    }
-
-    if (cellInfo.row.index !== data.length - 1 && names.includes(cellInfo.column.id) && cellInfo.value > 0) {
-      style.background = cellInfo.row.index % 2 === 0 ? 'rgba(246,166,0)' : 'rgb(246,166,0, 0.50)'
+    if (cellInfo.row.values.name !== 'Total' && names.includes(cellInfo.column.id) && cellInfo.value > 0) {
+      style.background = cellInfo.row.index % 2 === 0 ? colors.orange : colors.orange50
     }
 
     return style
@@ -155,7 +127,7 @@ export default function Table({
       columns,
       data,
       defaultColumn,
-      updateMyData
+      updateData
     }
   )
 
