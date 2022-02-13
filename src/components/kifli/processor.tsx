@@ -1,4 +1,4 @@
-import { Product } from './index'
+import { Person, Product } from './index'
 
 export function processKifli(order: string): Product[] {
   const byLines = order.split(/\n/)
@@ -12,7 +12,7 @@ export function processKifli(order: string): Product[] {
     const splitByX = amountAndPrice.split('×')
 
     const amount = splitByX[0]
-    const price = splitByX[1].trim().split(',')[0]
+    const price = splitByX[1].trim().replace(/\s/g, "").split(',')[0]
 
     return {
       name,
