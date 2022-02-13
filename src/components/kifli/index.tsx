@@ -106,8 +106,6 @@ export default function Kifli({ orderConfirmEmail }) {
   }, [data])
 
   const updateMyData = (rowIndex, columnId, value) => {
-    console.log(processed[rowIndex], columnId, value)
-
     setData(old =>
       old.map((row, index) => {
         if (index === rowIndex) {
@@ -179,7 +177,7 @@ export default function Kifli({ orderConfirmEmail }) {
 
   return (<>
       <div>
-        <button onClick={resetData}>Reset Data</button>
+        <button onClick={resetData}>Reset Table</button>
         <Styles>
           <Table
             sum={sum}

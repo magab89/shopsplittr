@@ -6,13 +6,13 @@ const PlusMinus = ({ value, onChange }) => (
     <button
       onClick={() => onChange(1)}
     >
-      plus
+      +
     </button>
     <span> {value} </span>
     <button
       onClick={() => onChange(-1)}
     >
-      minus
+      -
     </button>
   </>
 )
@@ -31,7 +31,6 @@ export default function Table({
   getRowProps,
   getCellProps,
 }) {
-  console.log(products)
   const data = React.useMemo(
     () => {
       return [...products, sum]
