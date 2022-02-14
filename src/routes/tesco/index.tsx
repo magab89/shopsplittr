@@ -1,4 +1,4 @@
-import { processTescoEmail } from './processor'
+import { processTescoEmail, TescoProduct } from './processor'
 import EmailInput from '../../components/input/email'
 import React, { useState } from 'react'
 import { ctrlA } from './orderExample'
@@ -25,9 +25,21 @@ const Button = styled.button`
 `
 
 function List({ data }) {
+  function format (product: TescoProduct) {
+    if (product.total) {
+      return product.isByKilo ?
+        `${product.name} - ${product.amount} kg - ${product.total} forint` :
+        `${product.name} - ${product.amount} db - ${product.total} forint`
+    } else {
+      return product.isByKilo ?
+        `${product.name} - ${product.amount} kg` :
+        `${product.name} - ${product.amount} db`
+    }
+  }
+
   return (
     <ul>
-      {data.map(d => (<li key={d.name}>{d.name}</li>))}
+      {data.map(d => (<li key={d.name}>{format(d)}</li>))}
     </ul>
   )
 }
