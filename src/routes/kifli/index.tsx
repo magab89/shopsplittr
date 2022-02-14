@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { processKifli } from './processor'
 import Table from '../../components/table'
-import { ctrlA } from './test-kifl-order'
+import EmailInput from '../../components/input/email'
+import { ctrlA } from './orderExample'
 
 export interface Product {
   name: string
@@ -23,7 +24,7 @@ const initTotal = (names: string[]) => {
   }
 }
 
-function calculateTotal (data: Product[]) {
+function calculateTotal(data: Product[]) {
   const total = { ...initTotal(names) }
 
   data.forEach(row => {
@@ -61,13 +62,12 @@ function calculateTotal (data: Product[]) {
 
 export default function Kifli() {
   const [email, setEmail] = useState('')
-  const [ready, setReady] = useState(false)
   const empty: Product[] = []
   const [data, setData] = useState(empty)
   const [total, setTotal] = useState(initTotal(names))
 
   useEffect(() => {
-    if (email && ready) {
+    if (email) {
       const processed = processKifli(email).map(item => (
         {
           ...item,
@@ -79,7 +79,7 @@ export default function Kifli() {
       ))
       setData(processed)
     }
-  }, [email, ready])
+  }, [email])
 
   useEffect(() => {
     setTotal(calculateTotal(data))
@@ -121,35 +121,16 @@ export default function Kifli() {
     setData(processed)
   }
 
-  function handleLoadData(e) {
-    if (email) setReady(true)
-  }
-
-  function handleLoadTest(e) {
-    setEmail(ctrlA)
-    setReady(true)
-  }
-
-  function handleDelete(e) {
-    setReady(false)
-    setEmail('')
-  }
-
-  function handleChange(event) {
-    setEmail(event.target.value)
+  function handleLoadData(data) {
+    setEmail(data)
   }
 
   return (<>
-      <textarea
-        value={email}
-        onChange={e => handleChange(e)}
-        rows={10}
+      <EmailInput
+        onDataLoad={handleLoadData}
+        exampleData={ctrlA}
       />
-      <button type="button" onClick={(e) => handleLoadData(e)}>LOAD ORDER EMAIL</button>
-      <button type="button" onClick={(e) => handleDelete(e)}>DELETE ORDER EMAIL</button>
-      <button type="button" onClick={(e) => handleLoadTest(e)}>LOAD TEST EMAIL</button>
-
-      { ready && email && <div>
+      {email && <div>
         <button onClick={resetData}>Reset Table</button>
         <Table
           sum={total}
