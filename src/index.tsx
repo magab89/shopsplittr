@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App, { Home } from './App'
+import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Kifli from './routes/kifli'
 import Tesco from './routes/tesco'
+import Home from './routes/home'
 
 ReactDOM.render(
   <BrowserRouter>

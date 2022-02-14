@@ -18,16 +18,6 @@ const StyledNav = styled.nav`
   }
 `
 
-export function Home () {
-  return (
-    <div>
-      <h1>
-        THIS IS HOME
-      </h1>
-    </div>
-  )
-}
-
 function App() {
   return (
     <div className="App">
