@@ -10,11 +10,11 @@ Join a meeting
 4 of many
 Szállítólevél - Tesco Otthonról - 1326595243
 Inbox
-Bagolya333
+Asdf
 
 Tesco <no-reply@mail.tesco.com>
 Fri, Sep 24, 2021, 12:30 PM
-to bagolya333
+to asdf
 
 tesco.hu
 Tesco logo
@@ -38,13 +38,13 @@ a Tesco online kiszállítási csapata
 
 
 
-Gábor Marosi(2)
-Bogdánfy utca 2, 9/36,
-1117
-Budapest 11
+Asdf Asdf(2)
+Asdf utca 123, 123,
+1234
+Budapest 23
 Budapest
 Dátum\t:\t24.09.2021
-Rendelésszám\t:\t1326595243
+Rendelésszám\t:\t11111111
 Gépjármű\t:\t2I
 Kiszállítási időablak\t:\t13:00-15:00
  
