@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-export const PlusMinus = ({ value, onChange }) => (
+const PlusMinus = ({ value, onChange }) => (
   <>
     <button
       onClick={() => onChange(1)}

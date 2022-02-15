@@ -3,6 +3,7 @@ export interface TescoProduct {
   price?: number
   isByKilo?: boolean
   amount: number
+  weight?: number
   total?: number
 }
 
@@ -10,30 +11,30 @@ function processNonAvailableProductLine (line: string): TescoProduct {
   const [name, amount] = line.replaceAll(',','.').split(/\t/)
   const isByKilo = amount.includes(' kg')
 
+  const weight = isByKilo ? parseFloat(amount.replace(' kg', '').trim()) : undefined
   return {
-    name,
-    amount: isByKilo ?
-      parseFloat(amount.replace(' kg', '').trim()) :
-      parseInt(amount),
+    name: isByKilo ? `${name} (${weight})`: name,
+    amount: isByKilo ? 1 : parseInt(amount),
+    weight
   }
 }
 
 function processProductLine (line: string): TescoProduct {
   const [name, price, amount, total] = line.replaceAll(',','.').split(/\t/)
   const isByKilo = amount.includes(' kg')
+  const weight = isByKilo ? parseFloat(amount.replace(' kg', '').trim()) : undefined
 
   return {
-    name,
+    name: isByKilo ? `${name} (${weight} kg)`: name,
     isByKilo,
-    amount: isByKilo ?
-      parseFloat(amount.replace(' kg', '').trim()) :
-      parseInt(amount),
+    amount: isByKilo ? 1 : parseInt(amount),
     price: isByKilo ? parseFloat(price.replace(' / kg', '').trim()) : parseFloat(price),
-    total: parseInt(total)
+    total: parseInt(total),
+    weight: isByKilo ? parseFloat(amount.replace(' kg', '').trim()) : undefined
   }
 }
 
-export function processTescoEmail({ email }) {
+export function processTescoEmail(email) {
   const afterATermekNemElerheto = email.split('A termék nem elérhető')[1]
 
   const notAvailable = afterATermekNemElerheto
