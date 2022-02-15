@@ -39,6 +39,7 @@ export default function EmailInput({
 
   return (<Styled>
       <textarea
+        placeholder={'Copy your order here'}
         value={email}
         onChange={e => handleChange(e)}
         rows={5}
