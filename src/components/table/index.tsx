@@ -8,16 +8,14 @@ const colors = {
   green: 'rgba(0,128,0,1)',
   orange: 'rgba(255,165,0, 1)',
   orange50: 'rgba(255,165,0, 0.5)',
-  white: 'rgba(255,255,255,1)',
-  white50: 'rgba(255,255,255,0.5)'
+  white: 'rgba(220,220,220)',
+  white50: 'rgb(150,150,150)'
 }
 
 const Styles = styled.div`
   padding: 1rem;
 
   table {
-    border-spacing: 0;
-    border: 1px solid black;
 
     tr {
       :last-child {
@@ -31,8 +29,6 @@ const Styles = styled.div`
     td {
       margin: 0;
       padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
 
       :last-child {
         border-right: 0;
