@@ -50,7 +50,9 @@ export function processTescoEmail(email) {
 
   const orderLines = order.split(/\n/)
 
-  const products = orderLines.map(processProductLine)
+  const products = orderLines.map(processProductLine).sort((a: TescoProduct, b: TescoProduct) => {
+    return a.isByKilo ? 1 : -1
+  })
   const notAvailableProducts = notAvailable.map(processNonAvailableProductLine)
 
   return { products, notAvailableProducts }
