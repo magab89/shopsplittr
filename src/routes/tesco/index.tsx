@@ -8,6 +8,7 @@ import { Product } from '../kifli'
 
 const FlexDiv = styled.div`
   margin: 5px;
+  padding: 5px;
   display: flex;
   background-color: gray;
   align-items: stretch;
@@ -156,8 +157,7 @@ export default function Tesco() {
   return (
     <div>
       <FlexDiv>
-        <h1>THIS IS TESCO</h1>
-        <Button onClick={() => console.log(processed)}>LOG</Button>
+        <p>Copy paste your "Szállítólevél" below </p>
       </FlexDiv>
 
       <EmailInput
