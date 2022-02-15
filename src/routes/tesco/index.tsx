@@ -165,7 +165,7 @@ export default function Tesco() {
         exampleData={ctrlA}
       />
 
-      {processed.products.length && <div>
+      {processed.products.length > 0 && <div>
         <Table
           sum={total}
           names={names}
